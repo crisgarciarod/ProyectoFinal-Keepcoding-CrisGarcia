@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="POST">
+  {{ form.csrf_token() }}
+  <h3 class="display-5">Edit</h3>
+  <div class="form-group">
+      {{ form.username.label}}
+      {{ form.username(class_="form-control", placeholder=user.username)}}
+      {% for error in form.username.errors %}
+      <span class="badge bg-warning text-dark">{{ error }}</span>
+      {% endfor %}
+  </div>
+  <div class="form-group">
+      {{ form.email.label}}
+      {{ form.email(class_="form-control", placeholder=user.email)}}
+      {% for error in form.email.errors %}
+      <span class="badge bg-warning text-dark">{{ error }}</span>
+      {% endfor %}
+  </div>
+  <div class="form-group">
+      {{ form.new_password.label}}
+      {{ form.new_password(class_="form-control")}}
+      {% for error in form.new_password.errors %}
+      <span class="badge bg-warning text-dark">{{ error }}</span>
+      {% endfor %}
+  </div>
+  <div class="form-group">
+      {{ form.password.label}}
+      {{ form.password(class_="form-control")}}
+      {% for error in form.password.errors %}
+      <span class="badge bg-warning text-dark">{{ error }}</span>
+      {% endfor %}
+  </div>
+  <div class="form-group">
+      {{ form.confirm_password.label}}
+      {{ form.confirm_password(class_="form-control")}}
+      {% for error in form.confirm_password.errors %}
+      <span class="badge bg-warning text-dark">{{ error }}</span>
+      {% endfor %}
+  </div>
+  {{ form.submit(class_="btn btn-secondary mt-2") }}
+</form>
+{% endblock %}

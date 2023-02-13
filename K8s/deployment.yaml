@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-deployment
+  labels:
+    app: python
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python
+  template:
+    metadata:
+      labels:
+        app: python
+    spec:
+      containers:
+      - name: python
+        image: IMAGE_SET_BY_KUBECTL_SET_IMAGE
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+        - name: FLASK_APP
+          value: "application.py"
+        - name: FLASK_ENV
+          value: "development"
+        - name: FLASK_RUN_HOST
+          value: "0.0.0.0"        

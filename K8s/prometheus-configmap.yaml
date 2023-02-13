@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+data:
+  prometheus.yaml: |-
+    global:
+      scrape_interval: 15s 
+      evaluation_interval: 15s
+    rule_files:
+      - "prometheus_rules.yaml"
+    alerting:
+      alertmanagers:
+      - scheme: http
+        static_configs:
+        - targets:
+          - "alertmanager-service.monitoring.svc:9093"
+
+    scrape_configs:
+     - job_name: 'prometheus'
+       static_configs:
+        - targets: ['localhost:9090']
+
+     - job_name: 'flask-pastebin'
+       static_configs:
+        - targets: ['deadbycloud.192.168.49.2.nip.io:80']
+
+  prometheus_rules.yaml: |-
+    groups:
+    - name: cpu
+      rules:
+      - alert: HighCpuLoad
+        # Condition for alerting
+        expr: cpu_usage_percent > 5
+        for: 30s
+        # Annotation - additional informational labels to store more information
+        annotations:
+          title: 'Server under high CPU load'
+          description: "Docker host is under high CPU load, the avg load 1m is at {{ $value}}. Reported by instance {{ $labels.instance }} of job {{ $labels.job }}."
+          # Labels - additional labels to be attached to the alert
+        labels:
+          severity: 'critical'
+
+    - name: memory
+      rules:
+      - alert: HighMemoryLoad
+        # Condition for alerting
+        expr: (rate(memory_usage_bytes[30s])/1000000) > 50
+        # Annotation - additional informational labels to store more information
+        annotations:
+          title: 'Server under high Memory load'
+          description: "Docker host is under high Memory load, the avg load 1m is at {{ $value}}. Reported by instance {{ $labels.instance }} of job {{ $labels.job }}."
+          # Labels - additional labels to be attached to the alert
+        labels:
+          severity: 'critical'
+        

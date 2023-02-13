@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alertmanager-deployment
+  labels:
+    app: alertmanager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alertmanager
+  template:
+    metadata:
+      labels:
+        app: alertmanager
+    spec:
+      containers:
+      - name: alertmanager
+        image: prom/alertmanager:v0.22.2
+        resources:
+            requests:
+             memory: "64Mi"
+             cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+        args:
+        - --config.file=/etc/alertmanager/alertmanager.yaml
+        volumeMounts:
+        - name: alertmanager-config-volume
+          mountPath: /etc/alertmanager
+      volumes:
+      - name: alertmanager-config-volume
+        configMap:
+          name: alertmanager-config
+

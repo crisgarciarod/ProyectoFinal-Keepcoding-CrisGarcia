@@ -1,0 +1,35 @@
+h3 {
+    text-align: center;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+#content {
+    height:100%;
+}
+
+.navbar {
+    background-color: #c1c5c9;
+}
+
+.pastebin_button_form {
+    display: inline;
+}
+
+#expire_date_info {
+    color: red;
+}
+
+#footer {
+    background-color: rgba(196, 186, 186, 0.2);
+}
+
+.hljs-ln-numbers {
+    text-align: center;
+    color: #ccc;
+    border-right: 1px solid #CCC;
+}

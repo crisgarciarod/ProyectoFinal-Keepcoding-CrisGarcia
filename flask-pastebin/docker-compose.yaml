@@ -1,0 +1,41 @@
+version: "3.3"
+services:
+  app:
+    environment:
+      DOCKERHUB_USER: $DOCKERHUB_USER
+      FLASK_APP: $FLASK_APP
+      FLASK_ENV: $FLASK_ENV
+      FLASK_RUN_HOST: $FLASK_RUN_HOST
+    build: ./
+    image: $DOCKERHUB_USER/deadbycloud:latest
+    ports:
+      - 5000:5000
+
+  prometheus:
+    image: prom/prometheus:latest
+    restart: unless-stopped
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml
+      - ./prometheus/prometheus_rules.yaml:/etc/prometheus/prometheus_rules.yaml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+
+  alertmanager:
+    image: prom/alertmanager:v0.22.2
+    container_name: alertmanager
+    volumes:
+    - ./alertmanager/config.yaml:/etc/alertmanager/config.yaml
+    command:
+    - '--config.file=/etc/alertmanager/config.yaml'
+    ports:
+    - 9093:9093
+    restart: unless-stopped
+    
+  grafana:
+    image: grafana/grafana:7.5.7
+    ports:
+      - 3000:3000
+  

@@ -1,0 +1,27 @@
+groups:
+- name: cpu
+  rules:
+  - alert: HighCpuLoad
+    # Condition for alerting
+    expr: cpu_usage_percent > 90
+    for: 30s
+    # Annotation - additional informational labels to store more information
+    annotations:
+      title: 'Server under high CPU load'
+      description: "Docker host is under high CPU load, the avg load 1m is at {{ $value}}. Reported by instance {{ $labels.instance }} of job {{ $labels.job }}."
+      # Labels - additional labels to be attached to the alert
+    labels:
+      severity: 'critical'
+
+- name: memory
+  rules:
+  - alert: HighMemoryLoad
+    # Condition for alerting
+    expr: (rate(memory_usage_bytes[30s])/1000000) > 1000
+    # Annotation - additional informational labels to store more information
+    annotations:
+      title: 'Server under high Memory load'
+      description: "Docker host is under high Memory load, the avg load 1m is at {{ $value}}. Reported by instance {{ $labels.instance }} of job {{ $labels.job }}."
+      # Labels - additional labels to be attached to the alert
+    labels:
+      severity: 'critical'

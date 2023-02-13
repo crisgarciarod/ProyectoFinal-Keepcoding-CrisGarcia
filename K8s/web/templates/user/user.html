@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row row-cols-4">
+  
+  {% for pastebin in user.pastebins %}
+
+  <div class="col p-3">
+    <a href="{{pastebin.link}}" class="list-group-item list-group-item-action">
+      <div class="d-flex w-100 justify-content-between">
+        <span class="badge bg-success">{{ pastebin.syntax }}</span>
+        <small>{{ pastebin.date.replace(microsecond=0) }}</small>
+      </div>
+      <p class="mb-1"><b>{{ pastebin.title if pastebin.title|length < 10 else pastebin.title[:10] + "..."}}</b></p>
+    </a>
+    <form class="pastebin_button_form" action="/delete/{{ pastebin.link }}">
+      <button class="btn btn-danger mt-1">Delete</button>
+    </form>
+  </div>
+
+  {% endfor %}
+  
+</div>
+
+{% if not user.pastebins %}
+
+<h1 class="display-2 text-break">You don't have any saved pastebins</h1>
+
+{% endif %}
+
+{% endblock %}

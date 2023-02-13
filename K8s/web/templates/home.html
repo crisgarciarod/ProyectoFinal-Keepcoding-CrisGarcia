@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content%}
+
+<div class="row">
+  <div class="col-9">
+    <form method="POST">
+
+      {{ form.csrf_token() }}
+      <div class="form-group mt-3">
+        {{ form.title.label}}
+        {{ form.title(class_="form-control", placeholder="Untitled")}}
+        {% for error in form.title.errors %}
+        <span class="badge bg-warning text-dark">{{ error }}</span>
+        {% endfor %}
+      </div>
+
+      {{ form.content.label }}
+      {{ form.content(class_="form-control", cols="35", rows="20") }}
+      {% for error in form.content.errors %}
+      <span class="badge bg-warning text-dark">{{ error }}</span>
+      {% endfor %}
+
+      {{ form.syntax.label}}
+      {{ form.syntax(class_="form-select")}}
+
+      {{ form.private.label }}
+      {{ form.private(class_="form-check-input") }}
+
+      {{ form.password(class_="form-control", disabled="", placeholder="Enter password") }}
+
+      {{ form.expire.label }}
+      {{ form.expire(class_="form-select")}}
+
+      {{ form.submit(class_="btn btn-secondary mt-2 mb-2") }}
+
+    </form>
+  </div>
+  <div class="col mt-3">
+    <div class="list-group mt-2">
+      <a href="/public?page=1"><p class="lead fs-3">Latest public pastebins:</a></p>
+
+      {% for pastebin in public_pastebins %}
+
+      <a href="{{pastebin.link}}" class="list-group-item list-group-item-action">
+        <div class="d-flex w-100 justify-content-between">
+          <span class="badge bg-success">{{ pastebin.syntax }}</span>
+          <small>{{ pastebin.date.replace(microsecond=0) }}</small>
+        </div>
+        <p class="mb-1"><b>{{ pastebin.title if pastebin.title|length < 15 else pastebin.title[:15] + "..."}}</b></p>
+      </a>
+
+      {% endfor %}
+      
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="{{ url_for('static',filename='js/pastebin_checkbox.js') }}"></script>
+{% endblock %}
